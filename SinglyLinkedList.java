@@ -113,21 +113,11 @@ public class SinglyLinkedList<E extends Comparable<E>> {
         }
 
         int[] order = new int[size];
-        for (int k = 0; k < size; k++) order[k] = k;
-
-
-        for (int a = 0; a < size - 1; a++) {
-            int minindex = a;
-            for (int b = a + 1; b < size; b++) {
-                int comp=arr[order[b]].getElement().compareTo(arr[order[minindex]].getElement());
-                if ( comp < 0) {
-                    minindex = b;
-                }
-            }
-            int tmp = order[a];
-            order[a] = order[minindex];
-            order[minindex] = tmp;
+        for (int k = 0; k < size; k++) 
+        {
+            order[k] = k;
         }
+        mergeSort(order, arr, 0, size);
 
         for (int a = 0; a < size / 2; a++) {
             int low = order[a];
@@ -144,6 +134,43 @@ public class SinglyLinkedList<E extends Comparable<E>> {
         head = arr[0];
         tail = arr[size - 1];
     }
-   
+    private void mergeSort(int[] order, Node<E>[] arr, int low, int high){
+        if (high - low <= 1){
+            return;
+        }
+        int mid = (low + high) / 2;
+        mergeSort(order, arr, low, mid);
+        mergeSort(order, arr, mid, high);
+
+        int[] temp = new int[high - low];
+        int i = low;
+        int j = mid;
+        int t = 0;
+        while (i < mid && j < high) {
+            int comp = arr[order[i]].getElement().compareTo(arr[order[j]].getElement());
+            if (comp <= 0) {
+                temp[t] = order[i];
+                i++;
+            } else {
+                temp[t] = order[j];
+                j++;
+            }
+            t++;
+        }
+        while (i < mid) {
+            temp[t] = order[i];
+            i++;
+            t++;
+        }
+        while (j < high) {
+            temp[t] = order[j];
+            j++;
+            t++;
+        }
+
+        for (int x = 0; x < temp.length; x++) {
+            order[low + x] = temp[x];
+        }
+    }
 }
 
