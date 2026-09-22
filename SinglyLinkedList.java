@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class SinglyLinkedList<E extends Comparable<E>> {
     private Node<E> head = null;
     private Node<E> tail = null;
@@ -100,9 +98,51 @@ public class SinglyLinkedList<E extends Comparable<E>> {
     }
 
     // write your codes here
-    public void swap(){
-        
+    public void swap() {
+        if (size <= 1){
+            return;
+        }
 
+        Node<E>[] arr = new Node[size];
+        Node<E> current = head;
+        int i = 0;
+        while (current != null) {
+            arr[i] = current;
+            i++;
+            current = current.getNext();
+        }
+
+        int[] order = new int[size];
+        for (int k = 0; k < size; k++) order[k] = k;
+
+
+        for (int a = 0; a < size - 1; a++) {
+            int minindex = a;
+            for (int b = a + 1; b < size; b++) {
+                int comp=arr[order[b]].getElement().compareTo(arr[order[minindex]].getElement());
+                if ( comp < 0) {
+                    minindex = b;
+                }
+            }
+            int tmp = order[a];
+            order[a] = order[minindex];
+            order[minindex] = tmp;
+        }
+
+        for (int a = 0; a < size / 2; a++) {
+            int low = order[a];
+            int high = order[size - 1 - a];
+            Node<E> t = arr[low];
+            arr[low] = arr[high];
+            arr[high] = t;
+        }
+
+        for (int a = 0; a < size - 1; a++) {
+            arr[a].setNext(arr[a + 1]);
+        }
+        arr[size - 1].setNext(null);
+        head = arr[0];
+        tail = arr[size - 1];
     }
    
 }
